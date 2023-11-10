@@ -31,11 +31,12 @@ ScreenManager:
             do_default_tab: False
             background_color: 255, 255, 255, 1
             TabbedPanelItem:
-                text: 'Tab 1'
+                text: 'Calculadora aritmética'
+                backgroud_color: 63, 195, 128, 1
                 
                 BoxLayout:
                     orientation: "vertical"
-                    
+
                     MDTextField:
                         id: val1
                         input_filter: 'float'
@@ -49,8 +50,7 @@ ScreenManager:
                         hint_text: "Enter the second value"
                         color_mode: 'custom'
                         helper_text_mode: "on_focus"
-                        
-                        
+
                     MDTextField:
                         id: val3
                         hint_text: "Result"
@@ -58,8 +58,7 @@ ScreenManager:
                         color_mode: 'custom'
                         icon_right_color: app.theme_cls.primary_color
                         icon_right: 'equal-box'
-                
-                    
+
                     MDRoundFlatIconButton:
                         id:add
                         text: "Addition"
@@ -88,8 +87,19 @@ ScreenManager:
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.div()
                         
+                    MDSpinner:
+                        id: rc_spin2
+                        size_hint: None, None
+                        size: dp(46), dp(46)
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        active: False
+
+                    MDLabel:
+                        id: result2
             TabbedPanelItem:
-                text: 'Tab 3'
+                text: 'Cálculo Diferencial e Integral'
+                backgroud_color: 63, 195, 128, 1
+                
                 BoxLayout:
                     orientation: "vertical"
                     
@@ -141,46 +151,66 @@ ScreenManager:
         self.title = 'Calculator App'
         return self.help_string
 
+    def tratamentoDeTextoVazio(t,text):
+        if not text:
+            return 0
+        else:
+            try:
+                return float(text)
+            except:
+                return 0
+
     def addition(self):
-        val1 = float(self.help_string.get_screen('Calculator App').ids.val1.text)
-        val2 = float(self.help_string.get_screen('Calculator App').ids.val2.text)
+        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val1.text)
+        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val2.text)
         res = val1 + val2
-        self.help_string.get_screen('Calculator App').ids.val3.text = "The Addition is: " +str("{:.5f}".format(res))
+        self.help_string.get_screen('Calculator App').ids.val3.text = str("{:.5f}".format(res))
 
     def sub(self):
-        val1 = float(self.help_string.get_screen('Calculator App').ids.val1.text)
-        val2 = float(self.help_string.get_screen('Calculator App').ids.val2.text)
+        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val1.text)
+        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val2.text)
         res = val1 - val2
-        self.help_string.get_screen('Calculator App').ids.val3.text = "The Subtraction is: " +str("{:.5f}".format(res))
+        self.help_string.get_screen('Calculator App').ids.val3.text = str("{:.5f}".format(res))
 
     def multi(self):
-        val1 = float(self.help_string.get_screen('Calculator App').ids.val1.text)
-        val2 = float(self.help_string.get_screen('Calculator App').ids.val2.text)
+        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val1.text)
+        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val2.text)
         res = val1 * val2
-        self.help_string.get_screen('Calculator App').ids.val3.text = "The Multification is: " +str("{:.5f}".format(res))
+        self.help_string.get_screen('Calculator App').ids.val3.text = str("{:.5f}".format(res))
 
     def div(self):
-        val1 = float(self.help_string.get_screen('Calculator App').ids.val1.text)
-        val2 = float(self.help_string.get_screen('Calculator App').ids.val2.text)
-        res = val1 / val2
-        self.help_string.get_screen('Calculator App').ids.val3.text = "The Division is: " +str("{:.5f}".format(res))
+        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val1.text)
+        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('Calculator App').ids.val2.text)
+        if val2:
+            res = val1 / val2
+            self.help_string.get_screen('Calculator App').ids.val3.text = str("{:.5f}".format(res))
+        else:
+            self.help_string.get_screen('Calculator App').ids.val3.text = "Por favor, insira um valor diferente de zero na segunda entrada"
 
     def integration(self):
         x = sp.symbols('x')
         val4 = self.help_string.get_screen('Calculator App').ids.val4.text
+        if not val4:
+            val4 = 0
         res = sp.integrate(val4, x)
         self.help_string.get_screen('Calculator App').ids.val5.text = "A integração resulta em " +str(res)
         
     def derivation(self):
         x = sp.symbols('x')
         val4 = self.help_string.get_screen('Calculator App').ids.val4.text
+        if not val4:
+            val4 = 0
         res = sp.diff(val4, x)
         self.help_string.get_screen('Calculator App').ids.val5.text = "A derivação resulta em " +str(res)
         
     def Laplace(self):
         t, s = sp.symbols('t s')
         val4 = self.help_string.get_screen('Calculator App').ids.val4.text
+        if not val4:
+            val4 = 0
         res = sp.laplace_transform(val4, t, s)
-        self.help_string.get_screen('Calculator App').ids.val5.text = "A derivação resulta em " +str(res)   
-            
-MainApp().run()
+        self.help_string.get_screen('Calculator App').ids.val5.text = "A transformada é " +str(res)
+        
+
+if __name__ == '__main__':
+    MainApp().run()
