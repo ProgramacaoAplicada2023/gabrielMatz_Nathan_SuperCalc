@@ -30,9 +30,11 @@ ScreenManager:
         TabbedPanel:
             do_default_tab: False
             background_color: 255, 255, 255, 1
+            tab_width: 200
+            
             TabbedPanelItem:
                 text: 'Calculadora aritmética'
-                backgroud_color: 63, 195, 128, 1
+                background_color: .72, 2.23, 1.46, 1
                 
                 BoxLayout:
                     orientation: "vertical"
@@ -98,7 +100,7 @@ ScreenManager:
                         id: result2
             TabbedPanelItem:
                 text: 'Cálculo Diferencial e Integral'
-                backgroud_color: 63, 195, 128, 1
+                background_color: .72, 2.23, 1.46, 1
                 
                 BoxLayout:
                     orientation: "vertical"
