@@ -1,7 +1,7 @@
 
-# SmartCalculator
+# SuperCalculator
 
-A SmartCalculator é uma calculadora avançada, com capacidade de realizar, além de operações básicas, operações na área de Cálculo como integrais, derivadas e transformadas. 
+A SuperCalculator é uma calculadora avançada, com capacidade de realizar, além de operações básicas, operações na área de Cálculo como integrais, derivadas e transformadas. 
 
 
 ## Equipe
@@ -26,7 +26,7 @@ O aplicativo será capaz de:
 ## Tutorial
 Por padrão, na abertura do aplicativo, uma calculadora comum será mostrada na tela. No canto superior esquerdo da tela haverá um botão que mostra os diferentes tipos de calculadoras presentes no programa, entre elas uma calculadora científica, uma calculadora de programador e uma calculadora que suporta operações de integral, derivada, transformações etc. 
 
-O programa será feito com Python utilizando Kivy.
+O programa será feito com Python utilizando o framework e bibliotecas do Kivy.
 
 Na primeira figura abaixo, temos a atual calculadora aritmética básica
 ![Logo do Markdown](img/Screenshot_1.png)
