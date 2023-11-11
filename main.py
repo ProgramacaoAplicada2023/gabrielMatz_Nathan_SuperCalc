@@ -98,6 +98,7 @@ ScreenManager:
 
                     MDLabel:
                         id: result2
+                        
             TabbedPanelItem:
                 text: 'Cálculo Diferencial e Integral'
                 background_color: .72, 2.23, 1.46, 1
@@ -149,6 +150,75 @@ ScreenManager:
 
                     MDLabel:
                         id: result
+                        
+            TabbedPanelItem:
+                text: 'Calculadora de programador'
+                background_color: .72, 2.23, 1.46, 1
+                
+                BoxLayout:
+                    orientation: "vertical"
+                    
+                    MDTextField:
+                        id: val6
+                        input_filter: 'int'
+                        hint_text: "Insira o primeiro valor"
+                        color_mode: 'custom'
+                        helper_text_mode: "on_focus"
+                        on_text: app.autofill()
+
+                    MDTextField:
+                        id: val7
+                        input_filter: 'int'
+                        hint_text: "Insira o segundo valor"
+                        color_mode: 'custom'
+                        helper_text_mode: "on_focus"
+
+                    MDTextField:
+                        id: val8
+                        multiline: "True"
+                        hint_text: "Resultado:"
+                        readonly : "True"
+                        color_mode: 'custom'
+                        icon_right_color: app.theme_cls.primary_color
+                        icon_right: 'equal-box'
+
+                    MDRoundFlatIconButton:
+                        id:add
+                        text: "Adição"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.addition()
+                    
+                    MDRoundFlatIconButton:
+                        id:sub
+                        text: "Subtração"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.sub()
+
+                    MDRoundFlatIconButton:
+                        id:add
+                        text: "Multiplicação"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.multi()
+
+                    MDRoundFlatIconButton:
+                        id:div
+                        text: "Divisão"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.div()
+                    
+                    MDSpinner:
+                        id: rc_spin3
+                        size_hint: None, None
+                        size: dp(46), dp(46)
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        active: False
+
+                    MDLabel:
+                        id: result3
     ''')
         self.title = 'SuperCalc'
         return self.help_string
@@ -202,6 +272,9 @@ ScreenManager:
         res = sp.laplace_transform(val4, t, s)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "A transformada é " +str(res)
         
+    def autofill(self):
+        val8 = "Binario: 1001\nDecimal: 9\nHexadecimal: 9\nOctal: 11"
+        self.help_string.get_screen('SuperCalc').ids.val8.text = val8
 
 if __name__ == '__main__':
     MainApp().run()

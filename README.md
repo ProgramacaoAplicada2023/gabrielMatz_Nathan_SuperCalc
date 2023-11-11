@@ -28,6 +28,9 @@ Por padrão, na abertura do aplicativo, uma calculadora comum será mostrada na 
 
 O programa será feito com Python utilizando Kivy.
 
-Imagem de exemplo:
-
-![Logo do Markdown](img/example.jpeg)
+Na primeira figura abaixo, temos a atual calculadora aritmética básica
+![Logo do Markdown](img/Screenshot_1.png)
+Nesta segunda figura, temos a atual calculadora para cálculo diferencial e integral, assim como também para tranformadas, como a de laplace
+![Logo do Markdown](img/Screenshot_2.png)
+Nesta terceira figura, temos a atual calculadora para programadores, com as conversões de decimal para binário, octal, decimal e hexadecimal
+![Logo do Markdown](img/Screenshot_3.png)
