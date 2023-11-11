@@ -23,6 +23,8 @@ O aplicativo será capaz de:
 5- Calcular as principais transformadas(Fourier, Laplace...);
 
 6- Exibir os resultados de forma tabelada em interface gráfica.
+
+7- Calcular e converter números binários e hexadecimais.
 ## Tutorial
 Por padrão, na abertura do aplicativo, uma calculadora comum será mostrada na tela. No canto superior esquerdo da tela haverá um botão que mostra os diferentes tipos de calculadoras presentes no programa, entre elas uma calculadora científica, uma calculadora de programador e uma calculadora que suporta operações de integral, derivada, transformações etc. 
 
