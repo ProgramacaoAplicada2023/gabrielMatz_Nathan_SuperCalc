@@ -238,51 +238,58 @@ ScreenManager:
     ''')
         self.title = 'SuperCalc'
         return self.help_string
+    def tratamentoDeTextoVazio(t,text):
+        if not text:
+            return 0.0
+        return text
+
     def addition(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 + val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def sub(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 - val2
-        self.help_string.get_screen('SuperCalc').ids.val3.text = "The Subtraction is: " +str("{:.5f}".format(res))
+        self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def multi(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 * val2
-        self.help_string.get_screen('SuperCalc').ids.val3.text = "The Multification is: " +str("{:.5f}".format(res))
+        self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def div(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
-        
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         if val2:
             res = val1 / val2
             self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
         else:
             self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
+
     def exp(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
-        
-        if val2:
-            res = val1**val2
-            self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
-        else:
-            self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
+        res = val1**val2
+        self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
     def log(self):
-        val1 = float(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = float(self.help_string.get_screen('SuperCalc').ids.val2.text)
-        
-        if val2:
-            res = mt.log(val1, val2)
-            self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = self.help_string.get_screen('SuperCalc').ids.val2.text
+        if not val2:
+            val2 = 10
         else:
-            self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
+            val2 = float(val2)
+        if val2 > 0 and val2 != 1:
+            if val1 > 0:
+                res = mt.log(val1, val2)
+                self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+            else:
+                self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor positivo no primeiro valor"
+        else:
+            self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor válido para a base (positivo e diferente de 1)"
     def integration(self):
         x = sp.symbols('x')
         val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
@@ -301,6 +308,7 @@ ScreenManager:
         res = sp.fourier_series(val4, (t, -np.pi, np.pi))
         res=res.truncate()
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
+        
     def autofill(self):
         val8 = "Binario: 1001\nDecimal: 9\nHexadecimal: 9\nOctal: 11"
         self.help_string.get_screen('SuperCalc').ids.val8.text = val8
