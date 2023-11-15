@@ -153,7 +153,7 @@ ScreenManager:
                         on_press: app.Laplace()
                     MDRoundFlatIconButton:
                         id:Fourier
-                        text: "Transformada de Fourier em t"
+                        text: "Série de Fourier em t"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.Fourier()
@@ -192,40 +192,58 @@ ScreenManager:
                     MDTextField:
                         id: val8
                         multiline: "True"
+                        hint_text: "Conversão:"
+                        readonly : "True"
+                        color_mode: 'custom'
+                        icon_right_color: app.theme_cls.primary_color
+                        icon_right: 'equal-box'
+                    MDTextField:
+                        id: val9
+                        multiline: "True"
                         hint_text: "Resultado:"
                         readonly : "True"
                         color_mode: 'custom'
                         icon_right_color: app.theme_cls.primary_color
                         icon_right: 'equal-box'
-
                     MDRoundFlatIconButton:
                         id:add
                         text: "Adição"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
-                        on_press: app.addition()
+                        on_press: app.addition2()
                     
                     MDRoundFlatIconButton:
                         id:sub
                         text: "Subtração"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
-                        on_press: app.sub()
+                        on_press: app.sub2()
 
                     MDRoundFlatIconButton:
                         id:add
                         text: "Multiplicação"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
-                        on_press: app.multi()
+                        on_press: app.multi2()
 
                     MDRoundFlatIconButton:
                         id:div
                         text: "Divisão"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
-                        on_press: app.div()
-                    
+                        on_press: app.div2()
+                    MDRoundFlatIconButton:
+                        id:bit1
+                        text: "Operação binária 1 valor"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.bit1()
+                    MDRoundFlatIconButton:
+                        id:bit2
+                        text: "Operação binária 2 valores"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.bit2()
                     MDSpinner:
                         id: rc_spin3
                         size_hint: None, None
@@ -302,6 +320,12 @@ ScreenManager:
         res = sp.diff(val4, x)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
+    def Laplace(self):
+        t, s = sp.symbols('t s')
+        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
+        res = sp.laplace_transform(val4, t, s, noconds=True)
+        self.help_string.get_screen('SuperCalc').ids.val5.text = "A transformada é " +str(res)
+        
     def Fourier(self):
         t, s = sp.symbols('t s')
         val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
@@ -310,8 +334,82 @@ ScreenManager:
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def autofill(self):
-        val8 = "Binario: 1001\nDecimal: 9\nHexadecimal: 9\nOctal: 11"
+        val6 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
+        binary_val = bin(val6)
+        decimal_val = str(val6)
+        hex_val = hex(val6)
+        octal_val = oct(val6)
+        val8 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
         self.help_string.get_screen('SuperCalc').ids.val8.text = val8
+    def addition2(self):
+        val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
+        val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
+        res = int(val1 + val2)
+        binary_val = bin(res)
+        decimal_val = str(res)
+        hex_val = hex(res)
+        octal_val = oct(res)
+        val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
 
+    def sub2(self):
+        val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
+        val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
+        res = int(val1 - val2)
+        binary_val = bin(res)
+        decimal_val = str(res)
+        hex_val = hex(res)
+        octal_val = oct(res)
+        val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+
+
+    def multi2(self):
+        val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
+        val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
+        res = int(val1 * val2)
+        binary_val = bin(res)
+        decimal_val = str(res)
+        hex_val = hex(res)
+        octal_val = oct(res)
+        val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+
+
+    def div2(self):
+        val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
+        val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
+        if val2:
+            res = int(val1 / val2)
+            self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        else:
+            self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
+        binary_val = bin(res)
+        decimal_val = str(res)
+        hex_val = hex(res)
+        octal_val = oct(res)
+        val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+    def bit1(self):
+        val1 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text)))
+        res1 = ~val1
+        res2 = val1 << 2
+        res3 = val1 >> 2
+        val9 = (f"Not: {res1}\nShift esquerda: {res2}\nShift Direita: {res3}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+    def bit2(self):
+        val1 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text)))
+        val2 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text)))
+        res1 = val1 & val2
+        res2 = val1 | val2
+        res3 = val1 ^ val2
+        val9 = (f"And: {res1}\nOr: {res2}\nXor: {res3}")
+        self.help_string.get_screen('SuperCalc').ids.val9.text = val9
+        self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
 if __name__ == '__main__':
     MainApp().run()
