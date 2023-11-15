@@ -280,6 +280,7 @@ ScreenManager:
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1**val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        
     def log(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
         val2 = self.help_string.get_screen('SuperCalc').ids.val2.text
@@ -295,15 +296,16 @@ ScreenManager:
                 self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor positivo no primeiro valor"
         else:
             self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor válido para a base (positivo e diferente de 1)"
+
     def integration(self):
         x = sp.symbols('x')
-        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
+        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.integrate(val4, x)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def derivation(self):
         x = sp.symbols('x')
-        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
+        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.diff(val4, x)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
@@ -315,9 +317,9 @@ ScreenManager:
         
     def Fourier(self):
         t, s = sp.symbols('t s')
-        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
+        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.fourier_series(val4, (t, -np.pi, np.pi))
-        res=res.truncate()
+        res = res.truncate()
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def autofill(self):
