@@ -18,6 +18,9 @@ sm.add_widget(Main(name='Calculator_App'))
 
 class MainApp(MDApp):
     def build(self):
+        self.memoria = 0
+        self.resultado = 0
+        self.historico = []
         self.help_string = Builder.load_string('''
 ScreenManager:
     Main:
@@ -99,7 +102,16 @@ ScreenManager:
                         text: "Logaritmo"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
-                        on_press: app.log()                  
+                        on_press: app.log()
+                        
+                    MDTextField:
+                        id: mem
+                        multiline: "True"
+                        hint_text: "Histórico"
+                        readonly : "True"
+                        color_mode: 'custom'
+                        icon_right_color: app.theme_cls.primary_color
+                        icon_right: 'equal-box'
                     MDSpinner:
                         id: rc_spin2
                         size_hint: None, None
@@ -266,18 +278,30 @@ ScreenManager:
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 + val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
-
+        self.historico.append(f'{val1} + {val2} = {res}\n')
+        self._manter_limite_historico()
+        self.memorizar()
+        self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
+        
     def sub(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 - val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        self.historico.append(f'{val1} - {val2} = {res}')
+        self._manter_limite_historico()
+        self.memorizar()
+        self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
 
     def multi(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 * val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        self.historico.append(f'{val1} * {val2} = {res}')
+        self._manter_limite_historico()
+        self.memorizar()
+        self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
 
     def div(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
@@ -285,6 +309,10 @@ ScreenManager:
         if val2:
             res = val1 / val2
             self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+            self.historico.append(f'{val1} / {val2} = {res}')
+            self._manter_limite_historico()
+            self.memorizar()
+            self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
         else:
             self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
 
@@ -293,6 +321,11 @@ ScreenManager:
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1**val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+        self.historico.append(f'{val1} ^ {val2} = {res}')
+        self._manter_limite_historico()
+        self.memorizar()
+        self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
+        
     def log(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
         val2 = self.help_string.get_screen('SuperCalc').ids.val2.text
@@ -304,35 +337,39 @@ ScreenManager:
             if val1 > 0:
                 res = mt.log(val1, val2)
                 self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+                self.historico.append(f'log({val1})/log({val2}) = {res}')
+                self._manter_limite_historico()
+                self.help_string.get_screen('SuperCalc').ids.mem.text = self.memorizar()
             else:
                 self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor positivo no primeiro valor"
         else:
             self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor válido para a base (positivo e diferente de 1)"
+
     def integration(self):
         x = sp.symbols('x')
         val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.integrate(val4, x)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
-        
+
     def derivation(self):
         x = sp.symbols('x')
         val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.diff(val4, x)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
-        
+
     def Laplace(self):
         t, s = sp.symbols('t s')
         val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.laplace_transform(val4, t, s, noconds=True)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "A transformada é " +str(res)
-        
+
     def Fourier(self):
         t, s = sp.symbols('t s')
         val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.fourier_series(val4, (t, -np.pi, np.pi))
         res=res.truncate()
         self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
-        
+
     def autofill(self):
         val6 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
         binary_val = bin(val6)
@@ -341,6 +378,7 @@ ScreenManager:
         octal_val = oct(val6)
         val8 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
         self.help_string.get_screen('SuperCalc').ids.val8.text = val8
+
     def addition2(self):
         val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
         val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
@@ -365,7 +403,6 @@ ScreenManager:
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
 
-
     def multi2(self):
         val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
         val2 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text))
@@ -377,7 +414,6 @@ ScreenManager:
         val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
-
 
     def div2(self):
         val1 = int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text))
@@ -394,6 +430,7 @@ ScreenManager:
         val9 = (f"Binario: {binary_val}\nDecimal: {decimal_val}\nHexadecimal: {hex_val}\nOctal: {octal_val}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+
     def bit1(self):
         val1 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text)))
         res1 = ~val1
@@ -402,6 +439,7 @@ ScreenManager:
         val9 = (f"Not: {res1} {bin(res1)}\nShift esquerda: {res2} {bin(res2)}\nShift Direita: {res3} {bin(res3)}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+
     def bit2(self):
         val1 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val6.text)))
         val2 = (int(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val7.text)))
@@ -411,5 +449,25 @@ ScreenManager:
         val9 = (f"And: {res1} {bin(res1)}\nOr: {res2} {bin(res2)}\nXor: {res3} {bin(res3)}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
+
+    def _manter_limite_historico(self):
+        if len(self.historico) > 10:
+            self.historico.pop(0)
+
+    def obter_historico(self):
+        return self.historico
+
+    def recuperar_memoria(self):
+        return self.memoria
+
+    def memorizar(self):
+        self.memoria = self.resultado
+
+    def atualizar(self):
+        mem = ''
+        for operacao in self.obter_historico():
+            mem += operacao
+        return mem
+
 if __name__ == '__main__':
     MainApp().run()
