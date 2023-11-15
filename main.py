@@ -399,7 +399,7 @@ ScreenManager:
         res1 = ~val1
         res2 = val1 << 2
         res3 = val1 >> 2
-        val9 = (f"Not: {res1}\nShift esquerda: {res2}\nShift Direita: {res3}")
+        val9 = (f"Not: {res1} {bin(res1)}\nShift esquerda: {res2} {bin(res2)}\nShift Direita: {res3} {bin(res3)}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
     def bit2(self):
@@ -408,7 +408,7 @@ ScreenManager:
         res1 = val1 & val2
         res2 = val1 | val2
         res3 = val1 ^ val2
-        val9 = (f"And: {res1}\nOr: {res2}\nXor: {res3}")
+        val9 = (f"And: {res1} {bin(res1)}\nOr: {res2} {bin(res2)}\nXor: {res3} {bin(res3)}")
         self.help_string.get_screen('SuperCalc').ids.val9.text = val9
         self.help_string.get_screen('SuperCalc').ids.val9.text = str(val9)
 if __name__ == '__main__':
