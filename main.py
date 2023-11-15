@@ -6,7 +6,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.lang import Builder
 import numpy as np
 import sympy as sp
-
+import math as mt
 
 class Main(Screen):
     pass
@@ -88,7 +88,18 @@ ScreenManager:
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.div()
-                        
+                    MDRoundFlatIconButton:
+                        id:div
+                        text: "Exponencial"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.exp()
+                    MDRoundFlatIconButton:
+                        id:div
+                        text: "Logaritmo"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.log()                  
                     MDSpinner:
                         id: rc_spin2
                         size_hint: None, None
@@ -122,25 +133,30 @@ ScreenManager:
                         
                     MDRoundFlatIconButton:
                         id:int
-                        text: "Integração"
+                        text: "Integração em x"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.integration()
                         
                     MDRoundFlatIconButton:
                         id:der
-                        text: "Derivar"
+                        text: "Derivação em x"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.derivation()
                         
                     MDRoundFlatIconButton:
                         id:laplace
-                        text: "Laplace"
+                        text: "Transformada de Laplace em t"
                         icon:"calculator"
                         pos_hint: {"center_x": .5, "center_y": .6}
                         on_press: app.Laplace()
-                        
+                    MDRoundFlatIconButton:
+                        id:Fourier
+                        text: "Transformada de Fourier em t"
+                        icon:"calculator"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                        on_press: app.Fourier()
                     MDSpinner:
                         id: rc_spin
                         size_hint: None, None
@@ -222,6 +238,10 @@ ScreenManager:
     ''')
         self.title = 'SuperCalc'
         return self.help_string
+    def tratamentoDeTextoVazio(t,text):
+        if not text:
+            return 0.0
+        return text
 
     def tratamentoDeTextoVazio(t,text):
         if not text:
@@ -255,23 +275,50 @@ ScreenManager:
         else:
             self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor diferente de zero no segundo valor"
 
+    def exp(self):
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
+        res = val1**val2
+        self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+    def log(self):
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = self.help_string.get_screen('SuperCalc').ids.val2.text
+        if not val2:
+            val2 = 10
+        else:
+            val2 = float(val2)
+        if val2 > 0 and val2 != 1:
+            if val1 > 0:
+                res = mt.log(val1, val2)
+                self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+            else:
+                self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor positivo no primeiro valor"
+        else:
+            self.help_string.get_screen('SuperCalc').ids.val3.text = "Por favor, insira um valor válido para a base (positivo e diferente de 1)"
     def integration(self):
         x = sp.symbols('x')
-        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
+        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.integrate(val4, x)
-        self.help_string.get_screen('SuperCalc').ids.val5.text = "A integração resulta em " +str(res)
+        self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def derivation(self):
         x = sp.symbols('x')
-        val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
+        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.diff(val4, x)
-        self.help_string.get_screen('SuperCalc').ids.val5.text = "A derivação resulta em " +str(res)
+        self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def Laplace(self):
         t, s = sp.symbols('t s')
         val4 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val4.text)
         res = sp.laplace_transform(val4, t, s)
         self.help_string.get_screen('SuperCalc').ids.val5.text = "A transformada é " +str(res)
+        
+    def Fourier(self):
+        t, s = sp.symbols('t s')
+        val4 = (self.help_string.get_screen('SuperCalc').ids.val4.text)
+        res = sp.fourier_series(val4, (t, -np.pi, np.pi))
+        res=res.truncate()
+        self.help_string.get_screen('SuperCalc').ids.val5.text = "" +str(res)
         
     def autofill(self):
         val8 = "Binario: 1001\nDecimal: 9\nHexadecimal: 9\nOctal: 11"
