@@ -225,29 +225,30 @@ ScreenManager:
 
     def tratamentoDeTextoVazio(t,text):
         if not text:
-            return 0
+            return 0.0
+        return text
 
     def addition(self):
-        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 + val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def sub(self):
-        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 - val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def multi(self):
-        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         res = val1 * val2
         self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
 
     def div(self):
-        val1 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text)
-        val2 = self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text)
+        val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
+        val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
         if val2:
             res = val1 / val2
             self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
