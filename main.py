@@ -1,8 +1,6 @@
 from kivymd.app import MDApp
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.app import App
-from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.lang import Builder
 import numpy as np
 import sympy as sp
