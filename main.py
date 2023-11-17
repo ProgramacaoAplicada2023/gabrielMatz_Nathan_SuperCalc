@@ -361,9 +361,12 @@ ScreenManager:
     def exp(self):
         val1 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val1.text))
         val2 = float(self.tratamentoDeTextoVazio(self.help_string.get_screen('SuperCalc').ids.val2.text))
-        res = val1**val2
-        self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
-        self.historico.append(f'{val1} ^ {val2} = {res}\n')
+        try:
+            res = val1**val2
+            self.help_string.get_screen('SuperCalc').ids.val3.text = str("{:.5f}".format(res))
+            self.historico.append(f'{val1} ^ {val2} = {res}\n')
+        except:
+            self.help_string.get_screen('SuperCalc').ids.val3.text = "Resultado maior que 9*10^18"
         self.memorizar()
         self.help_string.get_screen('SuperCalc').ids.mem.text = self.atualizar()
         self.help_string.get_screen('SuperCalc').ids.mem2.text = self.atualizar()
